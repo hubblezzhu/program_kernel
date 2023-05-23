@@ -1,4 +1,4 @@
-obj-m:=my_syscall.o
+obj-m:=my_kprobes.o
 PWD:= $(shell pwd)
 KERNELDIR:= /lib/modules/$(shell uname -r)/build
 EXTRA_CFLAGS= -O0
