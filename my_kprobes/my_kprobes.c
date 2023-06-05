@@ -1,4 +1,3 @@
-
 #include <linux/kprobes.h>
 
 #define KSYM_NAME "sysctl_tcp_mem"
@@ -11,10 +10,8 @@ typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
 kallsyms_lookup_name_t my_kallsyms_lookup_name;
 unsigned long addr;
 
-long target_tcp_mem[3] = {33520, 44692, 67038};
-
+long target_tcp_mem[3] = {33521, 44692, 67038};
 long tmp_tcp_mem[3] = {0, 0, 0};
-
 
 static int my_kprobes_init(void)
 {

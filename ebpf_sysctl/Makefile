@@ -14,13 +14,15 @@ LLC_FLAGS += -march=bpf -filetype=obj -o
 CFLAGS += -Wall -O2
 CFLAGS += -I$(LIBBPF_INCLUDE)
 
+
+
 USER_SRC_FILE=ebpf_sysctl_user.c
 
 KERN_SRC_FILE=ebpf_sysctl.c
 
 .PHONY
 user_prog:
-
+	$(CC) $(CFLAGS)
 
 .PHONY
 kern_prog:
