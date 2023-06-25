@@ -1,4 +1,4 @@
-obj-m:=my_kprobes.o
+obj-m:=my_kprobe.o
 PWD:= $(shell pwd)
 KERNELDIR:= /lib/modules/$(shell uname -r)/build
 EXTRA_CFLAGS= -O0
