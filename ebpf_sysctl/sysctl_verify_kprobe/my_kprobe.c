@@ -41,70 +41,70 @@ void intercept_stop(void);
 int fake_printk(char *, ... );
 
 
-const struct bpf_func_proto *
-cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-{
-	switch (func_id) {
-	case BPF_FUNC_get_local_storage:
-		return &bpf_get_local_storage_proto;
-	case BPF_FUNC_get_retval:
-		switch (prog->expected_attach_type) {
-		case BPF_CGROUP_INET_INGRESS:
-		case BPF_CGROUP_INET_EGRESS:
-		case BPF_CGROUP_SOCK_OPS:
-		case BPF_CGROUP_UDP4_RECVMSG:
-		case BPF_CGROUP_UDP6_RECVMSG:
-		case BPF_CGROUP_INET4_GETPEERNAME:
-		case BPF_CGROUP_INET6_GETPEERNAME:
-		case BPF_CGROUP_INET4_GETSOCKNAME:
-		case BPF_CGROUP_INET6_GETSOCKNAME:
-			return NULL;
-		default:
-			return &bpf_get_retval_proto;
-		}
-	case BPF_FUNC_set_retval:
-		switch (prog->expected_attach_type) {
-		case BPF_CGROUP_INET_INGRESS:
-		case BPF_CGROUP_INET_EGRESS:
-		case BPF_CGROUP_SOCK_OPS:
-		case BPF_CGROUP_UDP4_RECVMSG:
-		case BPF_CGROUP_UDP6_RECVMSG:
-		case BPF_CGROUP_INET4_GETPEERNAME:
-		case BPF_CGROUP_INET6_GETPEERNAME:
-		case BPF_CGROUP_INET4_GETSOCKNAME:
-		case BPF_CGROUP_INET6_GETSOCKNAME:
-			return NULL;
-		default:
-			return &bpf_set_retval_proto;
-		}
-	default:
-		return NULL;
-	}
-}
+// const struct bpf_func_proto *
+// cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+// {
+// 	switch (func_id) {
+// 	case BPF_FUNC_get_local_storage:
+// 		return &bpf_get_local_storage_proto;
+// 	case BPF_FUNC_get_retval:
+// 		switch (prog->expected_attach_type) {
+// 		case BPF_CGROUP_INET_INGRESS:
+// 		case BPF_CGROUP_INET_EGRESS:
+// 		case BPF_CGROUP_SOCK_OPS:
+// 		case BPF_CGROUP_UDP4_RECVMSG:
+// 		case BPF_CGROUP_UDP6_RECVMSG:
+// 		case BPF_CGROUP_INET4_GETPEERNAME:
+// 		case BPF_CGROUP_INET6_GETPEERNAME:
+// 		case BPF_CGROUP_INET4_GETSOCKNAME:
+// 		case BPF_CGROUP_INET6_GETSOCKNAME:
+// 			return NULL;
+// 		default:
+// 			return &bpf_get_retval_proto;
+// 		}
+// 	case BPF_FUNC_set_retval:
+// 		switch (prog->expected_attach_type) {
+// 		case BPF_CGROUP_INET_INGRESS:
+// 		case BPF_CGROUP_INET_EGRESS:
+// 		case BPF_CGROUP_SOCK_OPS:
+// 		case BPF_CGROUP_UDP4_RECVMSG:
+// 		case BPF_CGROUP_UDP6_RECVMSG:
+// 		case BPF_CGROUP_INET4_GETPEERNAME:
+// 		case BPF_CGROUP_INET6_GETPEERNAME:
+// 		case BPF_CGROUP_INET4_GETSOCKNAME:
+// 		case BPF_CGROUP_INET6_GETSOCKNAME:
+// 			return NULL;
+// 		default:
+// 			return &bpf_set_retval_proto;
+// 		}
+// 	default:
+// 		return NULL;
+// 	}
+// }
 
-/* Common helpers for cgroup hooks with valid process context. */
-const struct bpf_func_proto *
-cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-{
-	switch (func_id) {
-	case BPF_FUNC_get_current_uid_gid:
-		return &bpf_get_current_uid_gid_proto;
-	case BPF_FUNC_get_current_pid_tgid:
-		return &bpf_get_current_pid_tgid_proto;
-	case BPF_FUNC_get_current_comm:
-		return &bpf_get_current_comm_proto;
-	case BPF_FUNC_get_current_cgroup_id:
-		return &bpf_get_current_cgroup_id_proto;
-	case BPF_FUNC_get_current_ancestor_cgroup_id:
-		return &bpf_get_current_ancestor_cgroup_id_proto;
-#ifdef CONFIG_CGROUP_NET_CLASSID
-	case BPF_FUNC_get_cgroup_classid:
-		return &bpf_get_cgroup_classid_curr_proto;
-#endif
-	default:
-		return NULL;
-	}
-}
+// /* Common helpers for cgroup hooks with valid process context. */
+// const struct bpf_func_proto *
+// cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+// {
+// 	switch (func_id) {
+// 	case BPF_FUNC_get_current_uid_gid:
+// 		return &bpf_get_current_uid_gid_proto;
+// 	case BPF_FUNC_get_current_pid_tgid:
+// 		return &bpf_get_current_pid_tgid_proto;
+// 	case BPF_FUNC_get_current_comm:
+// 		return &bpf_get_current_comm_proto;
+// 	case BPF_FUNC_get_current_cgroup_id:
+// 		return &bpf_get_current_cgroup_id_proto;
+// 	case BPF_FUNC_get_current_ancestor_cgroup_id:
+// 		return &bpf_get_current_ancestor_cgroup_id_proto;
+// #ifdef CONFIG_CGROUP_NET_CLASSID
+// 	case BPF_FUNC_get_cgroup_classid:
+// 		return &bpf_get_cgroup_classid_curr_proto;
+// #endif
+// 	default:
+// 		return NULL;
+// 	}
+// }
 
 BPF_CALL_4(bpf_kallsyms_lookup_name, const char *, name, int, name_sz, int, flags, u64 *, res)
 {
@@ -131,22 +131,23 @@ static const struct bpf_func_proto bpf_kallsyms_lookup_name_proto = {
 	.arg4_type	= ARG_PTR_TO_LONG,
 };
 
-long unsigned int *real_sysctl_func_proto = 0xffff800008391180;
-// real_sysctl_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog) = \
-// (struct bpf_func_proto (*)(enum bpf_func_id, const struct bpf_prog *))0xffff800008391180;
+// long unsigned int *real_sysctl_func_proto = 0xffff800008391180;
+const struct bpf_func_proto *
+real_sysctl_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog) = \
+(struct bpf_func_proto (*)(enum bpf_func_id, const struct bpf_prog *))0xffff800008441614;
 
 const struct bpf_func_proto *
 fake_sysctl_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
 {
-	struct bpf_func_proto *func_proto;
+	// struct bpf_func_proto *func_proto;
 
-	func_proto = cgroup_common_func_proto(func_id, prog);
-	if (func_proto)
-		return func_proto;
+	// func_proto = cgroup_common_func_proto(func_id, prog);
+	// if (func_proto)
+	// 	return func_proto;
 
-	func_proto = cgroup_current_func_proto(func_id, prog);
-	if (func_proto)
-		return func_proto;
+	// func_proto = cgroup_current_func_proto(func_id, prog);
+	// if (func_proto)
+	// 	return func_proto;
 
 	switch (func_id) {
 	// case BPF_FUNC_sysctl_get_name:
@@ -161,7 +162,8 @@ fake_sysctl_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
 	// 	return &bpf_ktime_get_coarse_ns_proto;
 	// case BPF_FUNC_perf_event_output:
 	// 	return &bpf_event_output_data_proto;
-	case BPF_FUNC_kallsyms_lookup_name:
+	// case BPF_FUNC_kallsyms_lookup_name:
+	case 178:
 		return &bpf_kallsyms_lookup_name_proto;
 	default:
 		return bpf_base_func_proto(func_id);
