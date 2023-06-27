@@ -45,6 +45,12 @@ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
     return 1;
 }
 
+
+struct Fake_tcp_mem {
+    unsigned long low_mem;
+    unsigned long middle_mem;
+    unsigned long high_mem;
+};
  // * long bpf_kallsyms_lookup_name(const char *name, int name_sz, int flags, u64 *res)
 
 SEC("cgroup/sysctl")
@@ -96,6 +102,7 @@ int sysctl_test(struct bpf_sysctl *ctx)
 
     bpf_printk("symbol %s addr %lx\n", symbol_name, addr);
 
+
     bpf_printk("Before set\n");
     // read current value
     // memcpy(tmp_tcp_mem, (char *)addr, sizeof(long) * 3);
@@ -110,6 +117,11 @@ int sysctl_test(struct bpf_sysctl *ctx)
 
     // write new value
     // memcpy((char *)addr, (char *)target_tcp_mem, sizeof(long) * 3);
+
+    struct Fake_tcp_mem *ptr = (struct Fake_tcp_mem *)addr;
+    ptr->low_mem = target_tcp_mem[0];
+    ptr->middle_mem = target_tcp_mem[1];
+    ptr->high_mem = target_tcp_mem[2];
 
     bpf_printk("After set\n");
     // read new value
