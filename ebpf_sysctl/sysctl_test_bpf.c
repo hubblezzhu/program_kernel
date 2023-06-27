@@ -82,36 +82,46 @@ int sysctl_test(struct bpf_sysctl *ctx)
 
 //     return tcp_mem[0] < tcp_mem[1] && tcp_mem[1] < tcp_mem[2];
 
-    // name_size = sizeof(symbol_name) / sizeof(char);
-    // ret = bpf_kallsyms_lookup_name(symbol_name, name_size, flags, (unsigned long long *)&addr);
-    // if (ret < 0) {
-    //     bpf_printk("bpf_kallsyms_lookup_name failed. error %d\n", ret);
-    //     return 0;
-    // }
+    name_size = sizeof(symbol_name) / sizeof(char);
+    ret = bpf_kallsyms_lookup_name(symbol_name, name_size, flags, (unsigned long long *)&addr);
+    if (ret < 0) {
+        bpf_printk("bpf_kallsyms_lookup_name failed. error %d\n", ret);
+        return 0;
+    }
 
-    // if (addr == 0) {
-    //     bpf_printk("symbol %s not found. \n", symbol_name);
-    //     return 0;
-    // }
+    if (addr == 0) {
+        bpf_printk("symbol %s not found. \n", symbol_name);
+        return 0;
+    }
+
+    bpf_printk("symbol %s addr %lx\n", symbol_name, addr);
 
     bpf_printk("Before set\n");
     // read current value
-    memcpy(tmp_tcp_mem, (char *)addr, sizeof(long) * 3);
+    // memcpy(tmp_tcp_mem, (char *)addr, sizeof(long) * 3);
 
     bpf_printk("tcp_mem 0: %ld\n", tmp_tcp_mem[0]);
     bpf_printk("tcp_mem 1: %ld\n", tmp_tcp_mem[1]);
     bpf_printk("tcp_mem 2: %ld\n", tmp_tcp_mem[2]);
 
+    bpf_printk("target_tcp_mem 0: %ld\n", target_tcp_mem[0]);
+    bpf_printk("target_tcp_mem 1: %ld\n", target_tcp_mem[1]);
+    bpf_printk("target_tcp_mem 2: %ld\n", target_tcp_mem[2]);
+
     // write new value
-    memcpy((char *)addr, (char *)target_tcp_mem, sizeof(long) * 3);
+    // memcpy((char *)addr, (char *)target_tcp_mem, sizeof(long) * 3);
 
     bpf_printk("After set\n");
     // read new value
-    memcpy(tmp_tcp_mem, (char *)addr, sizeof(long) * 3);
+    // memcpy(tmp_tcp_mem, (char *)addr, sizeof(long) * 3);
 
     bpf_printk("tcp_mem 0: %ld\n", tmp_tcp_mem[0]);
     bpf_printk("tcp_mem 1: %ld\n", tmp_tcp_mem[1]);
     bpf_printk("tcp_mem 2: %ld\n", tmp_tcp_mem[2]);
+
+    bpf_printk("target_tcp_mem 0: %ld\n", target_tcp_mem[0]);
+    bpf_printk("target_tcp_mem 1: %ld\n", target_tcp_mem[1]);
+    bpf_printk("target_tcp_mem 2: %ld\n", target_tcp_mem[2]);
 
     return 0;
 }
