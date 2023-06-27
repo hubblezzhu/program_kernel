@@ -82,17 +82,17 @@ int sysctl_test(struct bpf_sysctl *ctx)
 
 //     return tcp_mem[0] < tcp_mem[1] && tcp_mem[1] < tcp_mem[2];
 
-    name_size = sizeof(symbol_name) / sizeof(char);
-    ret = bpf_kallsyms_lookup_name(symbol_name, name_size, flags, (unsigned long long *)&addr);
-    if (ret < 0) {
-        bpf_printk("bpf_kallsyms_lookup_name failed. error %d\n", ret);
-        return 0;
-    }
+    // name_size = sizeof(symbol_name) / sizeof(char);
+    // ret = bpf_kallsyms_lookup_name(symbol_name, name_size, flags, (unsigned long long *)&addr);
+    // if (ret < 0) {
+    //     bpf_printk("bpf_kallsyms_lookup_name failed. error %d\n", ret);
+    //     return 0;
+    // }
 
-    if (addr == 0) {
-        bpf_printk("symbol %s not found. \n", symbol_name);
-        return 0;
-    }
+    // if (addr == 0) {
+    //     bpf_printk("symbol %s not found. \n", symbol_name);
+    //     return 0;
+    // }
 
     bpf_printk("Before set\n");
     // read current value
