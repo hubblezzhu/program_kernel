@@ -13,14 +13,14 @@ static ssize_t sample_read(struct file *file, char __user *ubuf, size_t count, l
     *ppos += n;
     return n;
 }
-static struct file_operations sample_ops = {
-    .owner = THIS_MODULE,
-    .read = sample_read,
+static struct proc_ops sample_ops = {
+    // .owner = THIS_MODULE,
+    .proc_read = sample_read,
 };
 static struct proc_dir_entry *ent;
 static int __init sample_init(void)
 {
-    ent = proc_create("test", 0660, NULL, &sample_ops);
+    ent = proc_create("test", 0660, NULL, (struct proc_ops *)&sample_ops);
     if (!ent)
         return -1;
     return 0;
