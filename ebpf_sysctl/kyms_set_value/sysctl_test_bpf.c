@@ -29,14 +29,11 @@ SEC("cgroup/sysctl")
 int sysctl_test(struct bpf_sysctl *ctx)
 {
     unsigned long target_tcp_mem[3] = {117015, 156022, 234031};
-
     volatile int ret;
-
     int name_size = 0;
 
     bpf_printk("Entering sysctl ebpf hook...\n");
-
-    if (ctx->write)
+    if (!ctx->write)
         return 0;
 
     // if (!is_tcp_mem(ctx))
@@ -57,12 +54,15 @@ int sysctl_test(struct bpf_sysctl *ctx)
 
 //     return tcp_mem[0] < tcp_mem[1] && tcp_mem[1] < tcp_mem[2];
 
+    bpf_printk("start set ksyms value.\n");
     name_size = sizeof(symbol_name) / sizeof(char);
     ret = bpf_kyms_set_value(symbol_name, name_size, (char *)target_tcp_mem, sizeof(long) * 3);
     if (ret < 0) {
-        bpf_printk("bpf_kallsyms_lookup_name failed. error %d\n", ret);
+        bpf_printk("bpf_kyms_set_value failed. error %d\n", ret);
         return 0;
     }
+
+    bpf_printk("ksyms value set down.\n");
 
     return 0;
 }
