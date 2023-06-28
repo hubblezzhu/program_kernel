@@ -65,13 +65,13 @@ int sysctl_test(struct bpf_sysctl *ctx)
     int flags = 0;
     unsigned long addr = 0;
 
-    bpf_printk("Entering sysctl ebpf hook...\n");
-
     if (ctx->write)
         return 0;
 
     if (!is_tcp_mem(ctx))
         return 0;
+
+    bpf_printk("Entering sysctl ebpf hook...\n");
 
 //     ret = bpf_sysctl_get_current_value(ctx, value, MAX_VALUE_STR_LEN);
 //     if (ret < 0 || ret >= MAX_VALUE_STR_LEN)
@@ -118,10 +118,10 @@ int sysctl_test(struct bpf_sysctl *ctx)
     // write new value
     // memcpy((char *)addr, (char *)target_tcp_mem, sizeof(long) * 3);
 
-    struct Fake_tcp_mem *ptr = (struct Fake_tcp_mem *)addr;
-    ptr->low_mem = target_tcp_mem[0];
-    ptr->middle_mem = target_tcp_mem[1];
-    ptr->high_mem = target_tcp_mem[2];
+    //struct Fake_tcp_mem *ptr = (struct Fake_tcp_mem *)addr;
+    //ptr->low_mem = target_tcp_mem[0];
+    //ptr->middle_mem = target_tcp_mem[1];
+    //ptr->high_mem = target_tcp_mem[2];
 
     bpf_printk("After set\n");
     // read new value

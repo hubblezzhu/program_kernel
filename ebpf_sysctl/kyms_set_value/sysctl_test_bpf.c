@@ -23,7 +23,7 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif
 
-const char symbol_name[] = "sysctl_tcp_mem";
+const char symbol_name[] = "sysctl_tcp_mem111";
 
 SEC("cgroup/sysctl")
 int sysctl_test(struct bpf_sysctl *ctx)
