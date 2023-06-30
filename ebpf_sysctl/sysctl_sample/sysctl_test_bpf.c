@@ -57,17 +57,18 @@ int sysctl_tcp_mem(struct bpf_sysctl *ctx)
 	if (ret < 0 || ret >= MAX_VALUE_STR_LEN)
 		return 0;
 
-#pragma clang loop unroll(full)
-	for (i = 0; i < ARRAY_SIZE(tcp_mem); ++i) {
-		ret = bpf_strtoul(value + off, MAX_ULONG_STR_LEN, 0,
-				  tcp_mem + i);
-		if (ret <= 0 || ret > MAX_ULONG_STR_LEN)
-			return 0;
-		off += ret & MAX_ULONG_STR_LEN;
-	}
+//#pragma clang loop unroll(full)
+//	for (i = 0; i < ARRAY_SIZE(tcp_mem); ++i) {
+//		ret = bpf_strtoul(value + off, MAX_ULONG_STR_LEN, 0,
+//				  tcp_mem + i);
+//		if (ret <= 0 || ret > MAX_ULONG_STR_LEN)
+//			return 0;
+//		off += ret & MAX_ULONG_STR_LEN;
+//	}
 
 
-	return tcp_mem[0] < tcp_mem[1] && tcp_mem[1] < tcp_mem[2];
+//	return tcp_mem[0] < tcp_mem[1] && tcp_mem[1] < tcp_mem[2];
+	return 1;
 }
 
 char _license[] SEC("license") = "GPL";

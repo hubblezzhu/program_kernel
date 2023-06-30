@@ -58,6 +58,7 @@ int sysctl_test(struct bpf_sysctl *ctx)
 {
     unsigned long target_tcp_mem[3] = {33521, 44692, 67038};
     unsigned long tmp_tcp_mem[3] = {0, 0, 0};
+    char value[MAX_VALUE_STR_LEN];
 
     volatile int ret;
 
@@ -87,6 +88,10 @@ int sysctl_test(struct bpf_sysctl *ctx)
 //     }
 
 //     return tcp_mem[0] < tcp_mem[1] && tcp_mem[1] < tcp_mem[2];
+
+    ret = bpf_sysctl_get_current_value(ctx, value, MAX_VALUE_STR_LEN);
+    if (ret < 0 || ret >= MAX_VALUE_STR_LEN)
+        return 0;
 
     name_size = sizeof(symbol_name) / sizeof(char);
     ret = bpf_kallsyms_lookup_name(symbol_name, name_size, flags, (unsigned long long *)&addr);
@@ -135,7 +140,7 @@ int sysctl_test(struct bpf_sysctl *ctx)
     bpf_printk("target_tcp_mem 1: %ld\n", target_tcp_mem[1]);
     bpf_printk("target_tcp_mem 2: %ld\n", target_tcp_mem[2]);
 
-    return 0;
+    return 1;
 }
 
 
